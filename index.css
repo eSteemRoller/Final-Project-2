@@ -2,9 +2,10 @@
 
 * {
     padding: 0;
-    margin: 0;
+    margin: 0 auto;
     box-sizing: border-box;
     font-family: "Roboto", serif;
+    z-index: 1;
 }
 
 html {
@@ -16,6 +17,11 @@ body {
     overflow-x: hidden;
 }
 
+.row {
+    max-width: 1200px;
+
+}
+
 /* 
 
 NAVIGATION BAR 
@@ -23,31 +29,78 @@ NAVIGATION BAR
 */
 
 nav {
-    height: 96px;
-    display: flex;
-    padding-top: 32px;
+    height: 232px;
+    width: 100%;
+    background-color: #242424;
+}
+
+.nav__bkgd--img {
+    max-height: 200px;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: -16px;
+    margin: 16px;
 }
 
 .nav__container {
+    height: 232px;
     width: 100%;
     max-width: 1200px;
     display: flex;
     align-items: center;
     justify-content:space-between;
-    padding: 0 32px;
+    padding: 0;
     margin: 0 auto;
 }
 
-.nav__logo {
+.nav__row {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0;
+    margin: 0;
+}
+
+.mmf-logo {
     max-width: 160px;
+    margin: 0;
+}
+
+.nav__title {
+    margin-left: 176px;
+}
+
+.nav__title--1 {
+    font-size: 40px;
+    margin: 0 32px 0 32px;
+    text-align: center;
+}
+
+
+.nav__menu {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    margin: 0;
+}
+
+.nav__links {
+    display: flex;
+    align-items: center;
+
 }
 
 ul {
-    display: flex;
+
 }
 
 li {
     list-style-type: none;
+    cursor: pointer;
 }
 
 p {
@@ -83,3 +136,25 @@ a:hover {
 .nav__link--primary:hover {
     text-decoration: none;
 }
+
+button {
+    cursor: pointer;
+  }
+  
+  button:active {
+    transform: translateY(1px);
+  }
+  
+  .nav__button {
+    background-color: #7342d6;
+    color: white;
+    padding: 12px 24px;
+    margin-left: 16px;
+    font-size: 20px;
+    border-radius: 4px;
+    border: none;
+  }
+  
+  .header__container {
+    max-width: 1200px;
+  }
