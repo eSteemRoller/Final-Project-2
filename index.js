@@ -3,28 +3,35 @@
 // http://www.omdbapi.com/?apikey=[aac2feb4]&
 
 
+// Type: "movie"
+// Year: "2006"
+// imdbID: "tt0383216"
 
-async function main() {
-    const movies = await fetch(`http://www.omdbapi.com/?apikey=[aac2feb4]&`);
-    const movieData = await users.json();
-    console.log(movieData);
 
-    userListEl.innerHTML = usersData.map((user) => userHTML(user)).join(``);
-
+function onSearchChange(event) {
+    const movieTitle = event.target.value;
+    movieSearch(movieTitle);
 }
 
 
-// http://www.omdbapi.com/?apikey=[yourkey]&
-// aac2feb4
-// http://www.omdbapi.com/?apikey=[aac2feb4]&
 
-
-
-async function main() {
-    const movies = await fetch(`http://www.omdbapi.com/?apikey=[aac2feb4]&`);
-    const movieData = await users.json();
+async function movieSearch(movieTitle) {
+    const movies = await fetch(`http://www.omdbapi.com/?s=${movieTitle}&apikey=aac2feb4&`);
+    const movieData = await movies.json();
     console.log(movieData);
 
-    userListEl.innerHTML = usersData.map((user) => userHTML(user)).join(``);
+    // <div class="movieSearchResult__container">
+    //     <img src="${Poster}" alt="movie poster image"></img>
+    //     <div class="movieDescription">
+    //         <h4>${Title}</h4>
+    //         <p><b>Type: <b>${Type}</p>
+    //         <p><b>Year: <b>${Year}</p>
+    //         <p><b>imdbID: <b>${imdbID}</p>
+    //     </div>
+    // </div>
+
+    // userListEl.innerHTML = usersData.map((user) => userHTML(user)).join(``);
 
 }
+
+movieSearch(movieTitle);
