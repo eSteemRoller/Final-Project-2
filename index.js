@@ -35,3 +35,23 @@ async function movieSearch(movieTitle) {
 }
 
 movieSearch(movieTitle);
+async function movieSearch(movieTitle) {
+    const movies = await fetch(`http://www.omdbapi.com/?s=${movieTitle}&apikey=aac2feb4&`);
+    const movieData = await movies.json();
+    console.log(movieData);
+
+    // <div class="movieSearchResult__container">
+    //     <img src="${Poster}" alt="movie poster image"></img>
+    //     <div class="movieDescription">
+    //         <h4>${Title}</h4>
+    //         <p><b>Type: <b>${Type}</p>
+    //         <p><b>Year: <b>${Year}</p>
+    //         <p><b>imdbID: <b>${imdbID}</p>
+    //     </div>
+    // </div>
+
+    // userListEl.innerHTML = usersData.map((user) => userHTML(user)).join(``);
+
+}
+
+movieSearch(movieTitle);
