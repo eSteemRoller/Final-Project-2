@@ -14,7 +14,6 @@ function onSearchChange(event) {
 }
 
 
-
 async function movieSearch(movieTitle) {
     const response = await fetch(`http://www.omdbapi.com/?s=${encodeURIComponent(movieTitle)}&apikey=aac2feb4&`);
     const data = await response.json();
