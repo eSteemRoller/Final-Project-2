@@ -16,21 +16,30 @@ function onSearchChange(event) {
 
 
 async function movieSearch(movieTitle) {
-    const movies = await fetch(`http://www.omdbapi.com/?s=${movieTitle}&apikey=aac2feb4&`);
-    const movieData = await movies.json();
-    console.log(movieData);
+    const response = await fetch(`http://www.omdbapi.com/?s=${encodeURIComponent(movieTitle)}&apikey=aac2feb4&`);
+    const data = await response.json();
+    const moviesContainer = document.getElementById(`movies-container`);
 
-    // <div class="movieSearchResult__container">
-    //     <img src="${Poster}" alt="movie poster image"></img>
-    //     <div class="movieDescription">
-    //         <h4>${Title}</h4>
-    //         <p><b>Type: <b>${Type}</p>
-    //         <p><b>Year: <b>${Year}</p>
-    //         <p><b>imdbID: <b>${imdbID}</p>
-    //     </div>
-    // </div>
+    if (data.Response === "True") {
+        const movies = data.Search.slice(0, 6);
+        moviesContainer.innerHTML = movies.map(movie => movieHTML(movie)).join(``);
+    } else {
+        moviesContainer.innerHTML = `<p>No results found for "${movieTitle}".</p>`;
+    }
+}
 
-    // userListEl.innerHTML = usersData.map((user) => userHTML(user)).join(``);
 
+function movieHTML(movie) {
+    return `
+        <div class="movieSearchResult__container">
+            <img src="${movie.Poster !== "N/A" ? movie.Poster : `./assets/no-poster.jpg`}" alt="${movie.Title} poster" />
+            <div class="movieDescription">
+                <h4>${movie.Title}</h4>
+                <p><b>Type: <b>${movie.Type}</p>
+                <p><b>Year: <b>${movie.Year}</p>
+                <p><b>imdbID: <b>${movie.imdbID}</p>
+            </div>
+        </div>
+    `;
 }
 
