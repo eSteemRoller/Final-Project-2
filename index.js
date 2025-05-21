@@ -56,6 +56,19 @@ async function movieSearch(query) {
 //     }
 // }
 
+// async function movieSearch(movieTitle) {
+//     const response = await fetch(`http://www.omdbapi.com/?s=${encodeURIComponent(movieTitle)}&apikey=aac2feb4&`);
+//     const data = await response.json();
+//     const moviesContainer = document.getElementById(`movies-container`);
+
+//     if (data.Response === "True") {
+//         const movies = data.Search.slice(0, 6);
+//         moviesContainer.innerHTML = movies.map(movie => movieHTML(movie)).join(``);
+//     } else {
+//         moviesContainer.innerHTML = `<p>No results found for "${movieTitle}".</p>`;
+//     }
+// }
+
 
 function movieHTML(movie) {
     return `
