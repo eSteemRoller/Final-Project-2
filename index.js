@@ -8,20 +8,43 @@
 // imdbID: "tt0383216"
 
 
+let allMovies = [];
+let currentQuery = '';
+
+
+
+let debounceTimeout;
+function debounce(func, delay = 500) {
+    clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(func, delay);
+}
+
 function onSearchChange(event) {
-    const query = event.target.value;
-    movieSearch(query);
+    const value = event.target.value;
+    debounce(() => movieSearch(value));
+}
+
+
+function showSpinner() {
+    document.getElementById('loading-spinner').classList.remove('hidden');
+}
+
+function hideSpinner() {
+    document.getElementById('loading-spinner').classList.add('hidden');
 }
 
 
 async function movieSearch(query) {
+    currentQuery = query;
+    showSpinner();
+
     const response = await fetch(`https://www.omdbapi.com/?s=${encodeURIComponent(query)}&apikey=aac2feb4`);
     const data = await response.json();
 
     const moviesContainer = document.getElementById('movies-container');
 
     if (data.Response === "True") {
-        const basicMovies = data.Search.slice(0, 10); // Get more in case filtering removes some
+        const basicMovies = data.Search.slice(0, 10);
         const detailedMovies = await Promise.all(
             basicMovies.map(async (movie) => {
                 const detailRes = await fetch(`https://www.omdbapi.com/?i=${movie.imdbID}&apikey=aac2feb4`);
@@ -29,19 +52,51 @@ async function movieSearch(query) {
             })
         );
 
-        // Filter by description or genre (optional at this point)
-        const filtered = filterByKeywords(detailedMovies, query).slice(0, 6);
-
-        if (filtered.length > 0) {
-            moviesContainer.innerHTML = filtered.map(movie => movieHTML(movie)).join('');
-        } else {
-            moviesContainer.innerHTML = `<p>No matches found with genre/description including "${query}".</p>`;
-        }
-
+        allMovies = filterByKeywords(detailedMovies, query);
+        applyFilters(allMovies);
     } else {
         moviesContainer.innerHTML = `<p>No results found for "${query}".</p>`;
     }
+
+    hideSpinner();
 }
+
+
+function onFilterChange(event) {
+    applyFilters(allMovies);
+}
+
+function applyFilters(movies) {
+    const filterValue = document.getElementById('movie-filter').value;
+    let filtered = [...movies];
+
+    if (filterValue.startsWith('genre:')) {
+        const genre = filterValue.split(':')[1].toLowerCase();
+        filtered = filtered.filter(m => m.Genre.toLowerCase().includes(genre));
+    }
+
+    if (filterValue.startsWith('title:')) {
+        const direction = filterValue.split(':')[1];
+        filtered.sort((a, b) => {
+            return direction === 'asc'
+                ? a.Title.localeCompare(b.Title)
+                : b.Title.localeCompare(a.Title);
+        });
+    }
+
+    if (filterValue.startsWith('year:')) {
+        const direction = filterValue.split(':')[1];
+        filtered.sort((a, b) => {
+            return direction === 'asc'
+                ? parseInt(a.Year) - parseInt(b.Year)
+                : parseInt(b.Year) - parseInt(a.Year);
+        });
+    }
+
+    const moviesContainer = document.getElementById('movies-container');
+    moviesContainer.innerHTML = filtered.slice(0, 6).map(movie => movieHTML(movie)).join('');
+}
+
 
 // async function movieSearch(movieTitle) {
 //     const response = await fetch(`http://www.omdbapi.com/?s=${encodeURIComponent(movieTitle)}&apikey=aac2feb4&`);
@@ -84,3 +139,4 @@ function filterByKeywords(movies, keyword) {
         return genre.includes(lowerKeyword) || plot.includes(lowerKeyword) || title.includes(lowerKeyword);
     });
 }
+

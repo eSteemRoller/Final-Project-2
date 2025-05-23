@@ -35,9 +35,20 @@
                     <h3 class="header__title">
                         Find Out Everything About Your Favorite Movies and Shows!
                     </h3>
-                    <input type="search" class="search-bar" oninput="onSearchChange(event)" placeholder="Search for movies...">
+                    <input type="search" class="search-bar" oninput="onSearchChange(event)" placeholder="Search for movies and shows...">
+                    <div class="filter__container">
+                        <select id="movie-filter" onchange="onFilterChange(event)">
+                            <option value="">--- Filter By ---</option>
+                            <option value="genre:Action">Genre: Action</option>
+                            <option value="genre:Comedy">Genre: Comedy</option>
+                            <option value="genre:Drama">Genre: Drama</option>
+                            <option value="title:asc">Title (A–Z)</option>
+                            <option value="title:desc">Title (Z–A)</option>
+                            <option value="year:asc">Year (Ascending)</option>
+                            <option value="year:desc">Year (Descending)</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
         </header>
     </section>
     <main>
@@ -48,20 +59,12 @@
                         <h5 class="search-results__title">
                             Search results:
                         </h5>
-                        <div class="filter__container">
-                            <h6 class="filter__title filter__description">
-                                ???
-                            </h6>
-                            <select id="movie-filter" onchange="filterMovies(event)">
-                                
-                            </select>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div id="loading-spinner" class="spinner hidden">
-            <img src="./assets/movie-tape-spinner.gif" alt="Loading..." />
+            <img src="./assets/vintage-movie-film-reel-spinner.png" alt="Loading..." />
         </div>
     </main>
 </body>
