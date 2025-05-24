@@ -14,7 +14,7 @@
             <div class="nav__container">
                 <img src="./assets/marquee-1546213_1920.png" alt="" class="nav__bkgd--img">
                 <div class="row nav__row">
-                    <img src="./assets/Library-logo.svg" alt="" class="mmf-logo">
+                    <img src="./assets/MMF-logo.png" alt="" class="mmf-logo">
                     <div class="nav__title">
                         <h1 class="nav__title--1">Tonight Only!</h1>
                         <h2 class="nav__title--2">(or every time you visit this page)</h2>
@@ -36,6 +36,18 @@
                         Find Out Everything About Your Favorite Movies and Shows!
                     </h3>
                     <input type="search" class="search-bar" oninput="onSearchChange(event)" placeholder="Search for movies and shows...">
+                    <div class="filter__container">
+                        <select id="movie-filter" onchange="onFilterChange(event)">
+                            <option value="">--- Filter By ---</option>
+                            <option value="genre:Action">Genre: Action</option>
+                            <option value="genre:Comedy">Genre: Comedy</option>
+                            <option value="genre:Drama">Genre: Drama</option>
+                            <option value="title:asc">Title (A–Z)</option>
+                            <option value="title:desc">Title (Z–A)</option>
+                            <option value="year:asc">Year (Ascending)</option>
+                            <option value="year:desc">Year (Descending)</option>
+                        </select>
+                    </div>
                     <div class="filter__container">
                         <select id="movie-filter" onchange="onFilterChange(event)">
                             <option value="">--- Filter By ---</option>

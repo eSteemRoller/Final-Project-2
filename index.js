@@ -127,6 +127,21 @@ function movieHTML(movie) {
         </div>
     `;
 }
+function movieHTML(movie) {
+    return `
+        <div class="movieSearchResult__container">
+            <img src="${movie.Poster !== "N/A" ? movie.Poster : `./assets/no-poster.jpg`}" alt="${movie.Title} poster" />
+            <div class="movieDescription">
+                <h4>${movie.Title}</h4>
+                <p><b>Type: <b>${movie.Type}</p>
+                <p><b>Year: <b>${movie.Year}</p>
+                <p><b>Genre:</b> ${movie.Genre}</p>
+                <p><b>Plot:</b> ${movie.Plot}</p>
+                <p><b>imdbID: <b>${movie.imdbID}</p>
+            </div>
+        </div>
+    `;
+}
 
 
 function filterByKeywords(movies, keyword) {
