@@ -139,4 +139,14 @@ function filterByKeywords(movies, keyword) {
         return genre.includes(lowerKeyword) || plot.includes(lowerKeyword) || title.includes(lowerKeyword);
     });
 }
+function filterByKeywords(movies, keyword) {
+    const lowerKeyword = keyword.toLowerCase();
+    return movies.filter(movie => {
+        const genre = movie.Genre ? movie.Genre.toLowerCase() : '';
+        const plot = movie.Plot ? movie.Plot.toLowerCase() : '';
+        const title = movie.Title ? movie.Title.toLowerCase() : '';
+
+        return genre.includes(lowerKeyword) || plot.includes(lowerKeyword) || title.includes(lowerKeyword);
+    });
+}
 

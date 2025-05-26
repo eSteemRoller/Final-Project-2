@@ -226,3 +226,33 @@ SEARCH
     font-size: 14px;
     margin: 4px 0;
 }
+.movies-display {
+    /* display: flex; */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.movieSearchResult__container {
+    background-color: #f8f8f8;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.movieSearchResult__container img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+.movieDescription h4 {
+    margin-top: 12px;
+    font-size: 16px;
+}
+
+.movieDescription p {
+    font-size: 14px;
+    margin: 4px 0;
+}
