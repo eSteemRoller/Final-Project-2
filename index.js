@@ -58,6 +58,32 @@ async function movieSearch(query) {
 
     hideSpinner();
 }
+async function movieSearch(query) {
+    currentQuery = query;
+    showSpinner();
+
+    const response = await fetch(`https://www.omdbapi.com/?s=${encodeURIComponent(query)}&apikey=aac2feb4`);
+    const data = await response.json();
+
+    const moviesContainer = document.getElementById('movies-container');
+
+    if (data.Response === "True") {
+        const basicMovies = data.Search.slice(0, 10);
+        const detailedMovies = await Promise.all(
+            basicMovies.map(async (movie) => {
+                const detailRes = await fetch(`https://www.omdbapi.com/?i=${movie.imdbID}&apikey=aac2feb4`);
+                return await detailRes.json();
+            })
+        );
+
+        allMovies = filterByKeywords(detailedMovies, query);
+        applyFilters(allMovies);
+    } else {
+        moviesContainer.innerHTML = `<p>No results found for "${query}".</p>`;
+    }
+
+    hideSpinner();
+}
 
 
 function onFilterChange(event) {
