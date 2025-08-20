@@ -1,55 +1,50 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>"Marvelous!" Movie Finder</title>
-    <link rel="stylesheet" href="./index.css">
-    <script defer src="https://kit.fontawesome.com/7f147eb093.js" crossorigin="anonymous"></script>
-    <script defer src="./index.js"></script>
+  <meta charset="UTF-8">
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"Marvelous!" Movie Finder</title>
+  <link rel="stylesheet" href="./index.css">
+  <script defer src="https://kit.fontawesome.com/7f147eb093.js" crossorigin="anonymous"></script>
+  <script defer src="./index.js"></script>
 </head>
 <body>
-    <section id="search-landing">
-        <nav>
-            <div class="nav__container">
-                <img src="./assets/marquee-1546213_1920.png" alt="" class="nav__bkgd--img">
-                <div class="row nav__row">
-                    <img src="./assets/MMF-logo.png" alt="" class="mmf-logo">
-                    <div class="nav__title">
-                        <h1 class="nav__title--1">Tonight Only!</h1>
-                        <h2 class="nav__title--2">(or every time you visit this page)</h2>
-                    </div>
-                    <div class="nav__menu">
-                        <ul class="nav__links">
-                            <li class="nav__link">Home</li>
-                            <li class="nav__link">Top 10 Searches</li>
-                        </ul>
-                        <button class="nav__button">Contact</button>
-                    </div>
-                </div>
-            </div>
-        </nav>
+  <section id="search-landing">
+    <nav>
+      <div class="nav__container">
+        <img src="./assets/marquee-1546213_1920.png" alt="" class="nav__bkgd--img">
+        <div class="row nav__row">
+          <div class="nav__figure">
+            <img src="./assets/MMF-logo.png" alt="" class="mmf-logo">
+          </div>
+          <div class="nav__title">
+            <h1 class="nav__title--text">Tonight Only!</h1>
+            <h3 class="nav__sub-title--text">(or every time you visit this page)</h3>
+          </div>
+          <div class="nav__menu">
+            <ul class="nav__links">
+              <li class="nav__link">Home</li>
+              <div class="nav__link--stacked">
+                <li class="nav__link--stacked-top">My Top 10</li>
+                <li class="nav__link--stacked-bottom">Searches</li>
+              </div>
+            </ul>
+            <button class="nav__button">Contact</button>
+          </div>
+        </div>
+      </div>
+    </nav>
         <header>
             <div class="header__container">
                 <div class="row header__row">
                     <h3 class="header__title">
-                        Find Out Everything About Your Favorite Movies and Shows!
+                        Get Details About Your Favorite Movies, Shows, even Video Games!
                     </h3>
-                    <input type="search" class="search-bar" oninput="onSearchChange(event)" placeholder="Search for movies and shows...">
+                    <input type="search" class="search-bar" oninput="onSearchChange(event)" placeholder="Search for movies, shows, video games...">
                     <div class="filter__container">
-                        <select id="movie-filter" onchange="onFilterChange(event)">
-                            <option value="">--- Filter By ---</option>
-                            <option value="genre:Action">Genre: Action</option>
-                            <option value="genre:Comedy">Genre: Comedy</option>
-                            <option value="genre:Drama">Genre: Drama</option>
-                            <option value="title:asc">Title (A–Z)</option>
-                            <option value="title:desc">Title (Z–A)</option>
-                            <option value="year:asc">Year (Ascending)</option>
-                            <option value="year:desc">Year (Descending)</option>
-                        </select>
-                    </div>
-                    <div class="filter__container">
-                        <select id="movie-filter" onchange="onFilterChange(event)">
+                        <select class="filter-menu-box" id="movie-filter" onchange="onFilterChange(event)">
                             <option value="">--- Filter By ---</option>
                             <option value="genre:Action">Genre: Action</option>
                             <option value="genre:Comedy">Genre: Comedy</option>
@@ -79,5 +74,7 @@
             <img src="./assets/vintage-movie-film-reel-spinner.png" alt="Loading..." />
         </div>
     </main>
+    <footer>
+    </footer>
 </body>
 </html>
