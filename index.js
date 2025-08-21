@@ -171,12 +171,19 @@ function showTopSearches() {
   if (topSearches.length === 0) {
     container.innerHTML = "<p>No searches recorded yet.</p>";
     return;
+  } else {
+    document.getElementById("top-searches-link").addEventListener("click", (e) => {
+      e.preventDefault();
+      showTopSearches();
+    });
+    
   }
 
   container.innerHTML = `
-    <h3>Top 10 Searches</h3>
+    <h3>My Top 10 Searches</h3>
     <ol>
       ${topSearches.map(([term, count]) => `<li>${term} (${count})</li>`).join("")}
     </ol>
   `;
 }
+
