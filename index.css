@@ -19,6 +19,7 @@ body {
 }
 
 .row,
+.nav__row,
 .nav__container,
 .header__container {
   margin: 0 auto;            /* center these containers only */
@@ -71,22 +72,21 @@ nav {
   max-height: 200px;
   width: 100%;
   max-width: 1400px;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
   margin: 16px;
 }
 
 .nav__container {
-  position: relative;
+  position: absolute;
   height: 232px;
-  width: 100%;
+  width: 100%px;
   max-width: 1200px;
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
-  padding: 0 32px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .nav__row {
@@ -130,6 +130,7 @@ nav {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  padding-right: 64px;
 }
 
 .nav__links {

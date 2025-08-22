@@ -129,6 +129,8 @@ function movieHTML(movie) {
     `;
 }
 
+
+
 function filterByKeywords(movies, keyword) {
   const lowerKeyword = keyword.toLowerCase();
   return movies.filter((movie) => {
