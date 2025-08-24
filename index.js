@@ -6,8 +6,13 @@
 // Year: "2006"
 // imdbID: "tt0383216"
 
-let allMovies = [];
+let unfilteredSearch = [];
+
+// Keep track of the most recent unfiltered results
+let lastUnfilteredResults = [];
+
 let currentQuery = "";
+
 
 let debounceTimeout;
 function debounce(func, delay = 500) {
@@ -17,7 +22,7 @@ function debounce(func, delay = 500) {
 
 function onSearchChange(event) {
   const value = event.target.value;
-  debounce(() => movieSearch(value));
+  debounce(() => dbSearch(value));
 }
 
 function showSpinner() {
@@ -28,7 +33,7 @@ function hideSpinner() {
   document.getElementById("loading-spinner").classList.add("hidden");
 }
 
-async function movieSearch(query) {
+async function dbSearch(query) {
   currentQuery = query;
   showSpinner();
 
@@ -37,13 +42,13 @@ async function movieSearch(query) {
   );
   const data = await response.json();
 
-  const moviesContainer = document.getElementById("movies-container");
+  const resultsContainer = document.getElementById("results-container");
 
   if (data.Response === "True") {
     recordSearch(query);
-    const basicMovies = data.Search.slice(0, 10);
-    const detailedMovies = await Promise.all(
-      basicMovies.map(async (movie) => {
+    const basicResults = data.Search.slice(0, 10);
+    const detailedResults = await Promise.all(
+      basicResults.map(async (movie) => {
         const detailRes = await fetch(
           `https://www.omdbapi.com/?i=${movie.imdbID}&apikey=aac2feb4`
         );
@@ -51,22 +56,45 @@ async function movieSearch(query) {
       })
     );
 
-    allMovies = filterByKeywords(detailedMovies, query);
-    applyFilters(allMovies);
+    unfilteredSearch = filterByKeywords(detailedResults, query);
+
+    // Save last unfiltered results
+    lastUnfilteredResults = [...unfilteredSearch];
+
+    applyFilters(unfilteredSearch);
+
+    // Now that we have search results, enable filter menu
+    document.getElementById("result-filter").disabled = false;
   } else {
-    moviesContainer.innerHTML = `<p>No results found for "${query}".</p>`;
+    resultsContainer.innerHTML = `<p>No results found for "${query}".</p>`;
+
+    // If search not valid, disble filter menu
+    document.getElementById("result-filter").disabled = true;
   }
 
   hideSpinner();
 }
 
 function onFilterChange(event) {
-  applyFilters(allMovies);
+  applyFilters(unfilteredSearch);
 }
 
-function applyFilters(movies) {
-  const filterValue = document.getElementById("movie-filter").value;
-  let filtered = [...movies];
+function applyFilters(results) {
+  const filterSelect = document.getElementById("result-filter");
+  const filterValue = filterSelect.value;
+  const messageBox = document.getElementById("filter-message");
+  let filtered = [...results];
+
+  messageBox.classList.add("hidden");
+  messageBox.innerText = "";
+
+  if (!results || results.length === 0) {
+    // If no search results to filter then disable filter menu
+    filterSelect.disabled = true;
+    return;
+  } else {
+    filterSelect.disabled = false;
+  }
 
   if (filterValue.startsWith("genre:")) {
     const genre = filterValue.split(":")[1].toLowerCase();
@@ -91,49 +119,44 @@ function applyFilters(movies) {
     });
   }
 
-  const moviesContainer = document.getElementById("movies-container");
-  moviesContainer.innerHTML = filtered
-    .slice(0, 6)
-    .map((movie) => movieHTML(movie))
-    .join("");
-}
+  const resultsContainer = document.getElementById("results-container");
 
-// async function movieSearch(movieTitle) {
-//     const response = await fetch(`http://www.omdbapi.com/?s=${encodeURIComponent(movieTitle)}&apikey=aac2feb4&`);
-//     const data = await response.json();
-//     const moviesContainer = document.getElementById(`movies-container`);
+  if (filtered.length === 0) {
+    // Show inline warning message
+    messageBox.innerText =
+      "⚠️ Filter not applicable to current results. Reverting to previous unfiltered results.";
+    messageBox.classList.remove("hidden");
 
-//     if (data.Response === "True") {
-//         const movies = data.Search.slice(0, 6);
-//         moviesContainer.innerHTML = movies.map(movie => movieHTML(movie)).join(``);
-//     } else {
-//         moviesContainer.innerHTML = `<p>No results found for "${movieTitle}".</p>`;
-//     }
-// }
+    // Reset filter back to default
+    filterSelect.value = "";
 
-function movieHTML(movie) {
-  return `
-        <div class="movieSearchResult__container">
-            <img src="${
-              movie.Poster !== "N/A" ? movie.Poster : `./assets/no-poster.jpg`
-            }" alt="${movie.Title} poster" />
-            <div class="movieDescription">
-                <h4>${movie.Title}</h4>
-                <p><b>Type: </b>${movie.Type}</p>
-                <p><b>Year: </b>${movie.Year}</p>
-                <p><b>Genre: </b>${movie.Genre}</p>
-                <p><b>Plot: </b>${movie.Plot}</p>
-                <p><b>imdbID: </b>${movie.imdbID}</p>
-            </div>
-        </div>
-    `;
+    // Restore last unfiltered results
+    resultsContainer.innerHTML = lastUnfilteredResults
+      .slice(0, 6)
+      .map((movie) => resultsHTML(movie))
+      .join("");
+
+    // Fade-out message after 3 seconds
+    setTimeout(() => {
+      messageBox.classList.add("fade-out");
+      // After fade-out animation finishes, hide it fully
+      setTimeout(() => {
+        messageBox.classList.add("hidden");
+        messageBox.classList.remove("fade-out");
+      }, 1000); // match CSS duration
+    }, 3000);
+  } else {
+    resultsContainer.innerHTML = filtered
+      .slice(0, 6)
+      .map((movie) => resultsHTML(movie))
+      .join("");
+  }
 }
 
 
-
-function filterByKeywords(movies, keyword) {
+function filterByKeywords(results, keyword) {
   const lowerKeyword = keyword.toLowerCase();
-  return movies.filter((movie) => {
+  return results.filter((movie) => {
     const genre = movie.Genre ? movie.Genre.toLowerCase() : "";
     const plot = movie.Plot ? movie.Plot.toLowerCase() : "";
     const title = movie.Title ? movie.Title.toLowerCase() : "";
@@ -145,6 +168,26 @@ function filterByKeywords(movies, keyword) {
     );
   });
 }
+
+
+function resultsHTML(movie) {
+  return `
+    <div class="dbSearchResult__container">
+      <img src="${
+        movie.Poster !== "N/A" ? movie.Poster : `./assets/no-poster.jpg`
+        }" alt="${movie.Title} poster" />
+      <div class="resultDescription">
+        <h4>${movie.Title}</h4>
+        <p><b>Type: </b>${movie.Type}</p>
+        <p><b>Year: </b>${movie.Year}</p>
+        <p><b>Genre: </b>${movie.Genre}</p>
+        <p><b>Plot: </b>${movie.Plot}</p>
+        <p><b>imdbID: </b>${movie.imdbID}</p>
+      </div>
+    </div>
+  `;
+}
+
 
 function recordSearch(query) {
   if (!query) return;
@@ -166,26 +209,51 @@ function getTop10Searches(limit = 10) {
     .slice(0, limit);
 }
 
-function showTopSearches() {
-  const topSearches = getTopSearches();
-  const container = document.getElementById("movies-container");
+let showingTop10Searches = false; // track toggle state
 
-  if (topSearches.length === 0) {
-    container.innerHTML = "<p>No searches recorded yet.</p>";
+function showTop10Searches() {
+  const top10Searches = getTop10Searches();
+  const top10container = document.getElementById("results-container");
+
+  if (top10Searches.length === 0) {
+    top10container.innerHTML = "<p>No searches recorded yet.</p>";
+    showingTopSearches = false; // update state
     return;
-  } else {
-    document.getElementById("top-searches-link").addEventListener("click", (e) => {
-      e.preventDefault();
-      showTopSearches();
-    });
-    
   }
 
-  container.innerHTML = `
-    <h3>My Top 10 Searches</h3>
+  top10container.classList.add("display-block");
+  top10container.innerHTML = `
+    <h3 class="margin-bottom">My Top 10 Searches:</h3>
     <ol>
-      ${topSearches.map(([term, count]) => `<li>${term} (${count})</li>`).join("")}
+      ${top10Searches.map(([term, count]) => `<li class="default-pointer">${term} (${count})</li>`).join("")}
     </ol>
   `;
+
+  showingTop10Searches = true; // update state
 }
 
+function showLastResults() {
+  const top10container = document.getElementById("results-container");
+
+  if (lastUnfilteredResults.length === 0) {
+    top10container.innerHTML = "<p>No previous search results to show.</p>";
+    showingTopSearches = false; // update state
+    return;
+  }
+
+  top10container.innerHTML = lastUnfilteredResults
+    .slice(0, 6)
+    .map((movie) => resultsHTML(movie))
+    .join("");
+
+  showingTop10Searches = false; // update state
+}
+
+document.getElementById("top-searches-link").addEventListener("click", (e) => {
+  e.preventDefault();
+  if (showingTop10Searches) {
+    showLastResults();
+  } else {
+    showTop10Searches();
+  }
+});
