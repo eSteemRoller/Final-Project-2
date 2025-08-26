@@ -8,8 +8,8 @@
 
 let unfilteredSearch = [];
 
-// Keep track of the most recent unfiltered results
-let lastUnfilteredResults = [];
+// Keep track of the most recent unfiltered search results
+let lastUnfilteredSearchResults = [];
 
 let currentQuery = "";
 
@@ -33,25 +33,40 @@ function hideSpinner() {
   document.getElementById("loading-spinner").classList.add("hidden");
 }
 
+// Capture the default results container state once, at load time
+const defaultResultsHTML = document.getElementById("results-container").innerHTML;
+
 async function dbSearch(query) {
   currentQuery = query;
+
+  // If user cleared the input, reset and exit early
+  if (!query || query.trim().length === 0) {
+      // Reset "results-container" to original state
+      const resultsContainer = document.getElementById("results-container");
+      // And, disable the filter menu
+      document.getElementById("result-filter").disabled = true;
+      return;
+  }
+
   showSpinner();
 
-  const response = await fetch(
-    `https://www.omdbapi.com/?s=${encodeURIComponent(query)}&apikey=aac2feb4`
-  );
-  const data = await response.json();
+  try {
+    const response = await fetch(
+      `https://www.omdbapi.com/?s=${encodeURIComponent(query)}&apikey=aac2feb4`
+    );
+  
+    const data = await response.json();
 
-  const resultsContainer = document.getElementById("results-container");
+    const resultsContainer = document.getElementById("results-container");
 
-  if (data.Response === "True") {
-    recordSearch(query);
-    const basicResults = data.Search.slice(0, 10);
-    const detailedResults = await Promise.all(
-      basicResults.map(async (movie) => {
-        const detailRes = await fetch(
-          `https://www.omdbapi.com/?i=${movie.imdbID}&apikey=aac2feb4`
-        );
+    if (data.Response === "True") {
+      recordSearch(query);
+      const basicResults = data.Search.slice(0, 10);
+      const detailedResults = await Promise.all(
+        basicResults.map(async (movie) => {
+          const detailRes = await fetch(
+            `https://www.omdbapi.com/?i=${movie.imdbID}&apikey=aac2feb4`
+          );
         return await detailRes.json();
       })
     );
@@ -59,20 +74,22 @@ async function dbSearch(query) {
     unfilteredSearch = filterByKeywords(detailedResults, query);
 
     // Save last unfiltered results
-    lastUnfilteredResults = [...unfilteredSearch];
+    lastUnfilteredSearchResults = [...unfilteredSearch];
 
     applyFilters(unfilteredSearch);
 
     // Now that we have search results, enable filter menu
     document.getElementById("result-filter").disabled = false;
-  } else {
-    resultsContainer.innerHTML = `<p>No results found for "${query}".</p>`;
-
-    // If search not valid, disble filter menu
-    document.getElementById("result-filter").disabled = true;
+    } else {
+      // Search not valid, display message and disable the filter menu
+      resultsContainer.innerHTML = `<p>No results found for "${query}".</p>`;
+      document.getElementById("result-filter").disabled = true;
+    } 
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  } finally {
+    hideSpinner();
   }
-
-  hideSpinner();
 }
 
 function onFilterChange(event) {
@@ -124,14 +141,14 @@ function applyFilters(results) {
   if (filtered.length === 0) {
     // Show inline warning message
     messageBox.innerText =
-      "⚠️ Filter not applicable to current results. Reverting to previous unfiltered results.";
+      "⚠️ Filter not applicable to current results. Reverting to last unfiltered results.";
     messageBox.classList.remove("hidden");
 
     // Reset filter back to default
     filterSelect.value = "";
 
     // Restore last unfiltered results
-    resultsContainer.innerHTML = lastUnfilteredResults
+    resultsContainer.innerHTML = lastUnfilteredSearchResults
       .slice(0, 6)
       .map((movie) => resultsHTML(movie))
       .join("");
@@ -211,49 +228,49 @@ function getTop10Searches(limit = 10) {
 
 let showingTop10Searches = false; // track toggle state
 
-function showTop10Searches() {
-  const top10Searches = getTop10Searches();
-  const top10container = document.getElementById("results-container");
 
-  if (top10Searches.length === 0) {
-    top10container.innerHTML = "<p>No searches recorded yet.</p>";
-    showingTopSearches = false; // update state
-    return;
-  }
+function showLastSearchResults() { 
+  showingTop10Searches = false; // update state
+  console.log("showLastResults() called. Setting showingTop10Searches = false");
 
-  top10container.classList.add("display-block");
-  top10container.innerHTML = `
-    <h3 class="margin-bottom">My Top 10 Searches:</h3>
-    <ol>
-      ${top10Searches.map(([term, count]) => `<li class="default-pointer">${term} (${count})</li>`).join("")}
-    </ol>
-  `;
+  const top10container = document.getElementById("top10searches__container");
 
-  showingTop10Searches = true; // update state
-}
-
-function showLastResults() {
-  const top10container = document.getElementById("results-container");
-
-  if (lastUnfilteredResults.length === 0) {
+  if (lastUnfilteredSearchResults.length === 0) { 
+    showingTop10Searches = false; // update state
     top10container.innerHTML = "<p>No previous search results to show.</p>";
-    showingTopSearches = false; // update state
     return;
   }
 
-  top10container.innerHTML = lastUnfilteredResults
+  top10container.innerHTML = lastUnfilteredSearchResults
     .slice(0, 6)
     .map((movie) => resultsHTML(movie))
     .join("");
-
-  showingTop10Searches = false; // update state
 }
 
-document.getElementById("top-searches-link").addEventListener("click", (e) => {
-  e.preventDefault();
-  if (showingTop10Searches) {
-    showLastResults();
+function showTop10SearchesDialog() {
+  const top10Searches = getTop10Searches();
+  const dialog = document.getElementById("top10searches-dialog");
+  const list = document.getElementById("top10searches-list");
+
+  if (top10Searches.length === 0) {
+    list.innerHTML = "<li>No searches recorded.</li>";
   } else {
-    showTop10Searches();
+    list.innerHTML = top10Searches
+      .map(([term, count]) => `<li>${term} (${count})</li>`)
+      .join("");
   }
+
+  dialog.classList.remove("hidden");
+}
+
+function hideTop10Searches() {
+  document.getElementById("top10searches-dialog").classList.add("hidden");
+}
+
+// Hook up listeners
+document.getElementById("top10searches-link").addEventListener("click", (e) => {
+  e.preventDefault();
+  showTop10SearchesDialog();
 });
+
+document.getElementById("close-top10searches").addEventListener("click", hideTop10Searches);

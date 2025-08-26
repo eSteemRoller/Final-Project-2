@@ -26,7 +26,7 @@
             <div class="nav__menu">
               <ul class="nav__links">
                 <li class="nav__link">Home</li>
-                <div class="nav__link--stacked" id="top-searches-link">
+                <div id="top10searches-link" class="nav__link--stacked">
                   <li class="nav__link--stacked-top">My Top 10</li>
                   <li class="nav__link--stacked-bottom">Searches</li>
                 </div>
@@ -36,6 +36,13 @@
           </div>
         </div>
       </nav>
+      <div id="top10searches-dialog" class="top10searches-dialog hidden">
+        <div class="top10searches-dialog__content">
+          <h3 class="mb-16">My Top 10 Searches:</h3>
+          <ol id="top10searches-list" class="mb-16"></ol>
+          <button id="close-top10searches" class="close-btn">Close</button>
+        </div>
+      </div>
       <header>
         <div class="header__container">
           <div class="row header__row">
@@ -55,6 +62,7 @@
                 <option value="genre:Documentary">Genre: Documentary</option>
                 <option value="genre:Drama">Genre: Drama</option>
                 <option value="genre:Family">Genre: Family</option>
+                <option value="genre:Fantasy">Genre: Fantasy</option>
                 <option value="genre:Game-Show">Genre: Game-Show</option>
                 <option value="genre:History">Genre: History</option>
                 <option value="genre:Horror">Genre: Horror</option>
