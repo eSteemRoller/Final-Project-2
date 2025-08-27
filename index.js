@@ -194,7 +194,7 @@ function resultsHTML(movie) {
         movie.Poster !== "N/A" ? movie.Poster : `./assets/no-poster.jpg`
         }" alt="${movie.Title} poster" />
       <div class="resultDescription">
-        <h4>${movie.Title}</h4>
+        <h4 class="mb-16">${movie.Title}</h4>
         <p><b>Type: </b>${movie.Type}</p>
         <p><b>Year: </b>${movie.Year}</p>
         <p><b>Genre: </b>${movie.Genre}</p>
