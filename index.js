@@ -25,13 +25,15 @@ function onSearchChange(event) {
   debounce(() => dbSearch(value));
 }
 
-function showSpinner() {
-  document.getElementById("loading-spinner").classList.remove("hidden");
-}
 
-function hideSpinner() {
-  document.getElementById("loading-spinner").classList.add("hidden");
-}
+// function showSpinner() {
+//   document.getElementById("loading-spinner").classList.remove("hidden");
+// }
+
+// function hideSpinner() {
+//   document.getElementById("loading-spinner").classList.add("hidden");
+// }
+
 
 // Capture the default results container state once, at load time
 const defaultResultsHTML = document.getElementById("results-container").innerHTML;
@@ -48,7 +50,7 @@ async function dbSearch(query) {
       return;
   }
 
-  showSpinner();
+  // showSpinner();
 
   try {
     const response = await fetch(
@@ -87,9 +89,9 @@ async function dbSearch(query) {
     } 
   } catch (error) {
     console.error("Error fetching data:", error);
-  } finally {
-    hideSpinner();
-  }
+  } // finally {
+  //   hideSpinner();
+  // }
 }
 
 function onFilterChange(event) {
