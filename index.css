@@ -57,11 +57,47 @@ h4 {
   font-size: 16px;
 }
 
+/* Generic skeleton block */
+.skeleton {
+  background: linear-gradient(90deg, #eee 25%, #ddd 37%, #eee 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
+  border-radius: 4px;
+}
+
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
 /* 
 
 NAVIGATION BAR 
 
 */
+
+.skeleton-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 64px;
+}
+
+.skeleton-logo {
+  width: 120px;
+  height: 40px;
+}
+
+.skeleton-title {
+  width: 200px;
+  height: 24px;
+}
+
+.skeleton-menu {
+  width: 160px;
+  height: 24px;
+}
+
 
 nav {
   height: 240px;
@@ -229,6 +265,23 @@ button {
 HEADER
 
 */
+
+
+.skeleton-header-top {
+  width: 60%;
+  height: 28px;
+  margin-bottom: 16px;
+}
+.skeleton-header-middle {
+  width: 80%;
+  height: 20px;
+  margin-bottom: 12px;
+}
+.skeleton-header-bottom {
+  width: 40%;
+  height: 20px;
+}
+
 
 .header__container {
   max-width: 1200px;

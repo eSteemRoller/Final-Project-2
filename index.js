@@ -38,6 +38,8 @@ function onSearchChange(event) {
 // Capture the default results container state once, at load time
 const defaultResultsHTML = document.getElementById("results-container").innerHTML;
 
+
+
 async function dbSearch(query) {
   currentQuery = query;
 
@@ -50,18 +52,31 @@ async function dbSearch(query) {
       return;
   }
 
-  // showSpinner();
+  function showSearchSkeletons() {
+  const resultsContainer = document.getElementById("results-container");
+  resultsContainer.innerHTML = `
+    ${Array(6).fill().map(() => `
+      <div class="dbSearchResult__container">
+        <div class="skeleton skeleton-poster"></div>
+        <div class="skeleton skeleton-title"></div>
+        <div class="skeleton skeleton-plot"></div>
+      </div>
+    `).join("")}
+  `;
+  }
+
+  showSearchSkeletons(); 
 
   try {
-    const response = await fetch(
+    const dbResponse = await fetch(
       `https://www.omdbapi.com/?s=${encodeURIComponent(query)}&apikey=aac2feb4`
     );
   
-    const data = await response.json();
+    const data = await dbResponse;
 
     const resultsContainer = document.getElementById("results-container");
 
-    if (data.Response === "True") {
+    if (data.dbResponse === "True") {
       recordSearch(query);
       const basicResults = data.Search.slice(0, 10);
       const detailedResults = await Promise.all(
