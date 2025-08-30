@@ -13,32 +13,32 @@
   <body>
     <section id="mmf-landing">
       <nav>
-        <div class="nav__row skeleton-nav">
-          <div class="skeleton skeleton-logo"></div>
-          <div class="skeleton skeleton-title"></div>
-          <div class="skeleton skeleton-menu"></div>
-        </div>
-      </nav>
-      <nav>
         <div class="nav__container">
-          <img src="./assets/marquee-1546213_1920-modified1a_87a55e24.png" alt="" class="nav__bkgd--img">
-          <div class="nav__row">
-            <div class="nav__figure">
-              <img src="./assets/MMF-logo.png" alt="" class="mmf-logo">
-            </div>
-            <div class="nav__title">
-              <h1 class="nav__title--text">Tonight Only!</h1>
-              <h3 class="nav__sub-title--text">(or every time you visit this page)</h3>
-            </div>
-            <div class="nav__menu">
-              <ul class="nav__links">
-                <li class="nav__link">Home</li>
-                <div id="top10searches-link" class="nav__link--stacked">
-                  <li class="nav__link--stacked-top">My Top 10</li>
-                  <li class="nav__link--stacked-bottom">Searches</li>
-                </div>
-              </ul>
-              <button class="nav__button">Contact</button>
+          <div class="nav__row skeleton-nav">
+            <div class="skeleton skeleton-logo"></div>
+            <div class="skeleton skeleton-title"></div>
+            <div class="skeleton skeleton-menu"></div>
+          </div>
+          <div id="nav-real" class="nav__row hidden"></div>
+            <img src="./assets/marquee-1546213_1920-modified1a_87a55e24.png" alt="" class="nav__bkgd--img">
+            <div class="nav__row">
+              <div class="nav__figure">
+                <img src="./assets/MMF-logo.png" alt="" class="mmf-logo">
+              </div>
+              <div class="nav__title">
+                <h1 class="nav__title--text">Tonight Only!</h1>
+                <h3 class="nav__sub-title--text">(or every time you visit this page)</h3>
+              </div>
+              <div class="nav__menu">
+                <ul class="nav__links">
+                  <li class="nav__link">Home</li>
+                  <div id="top10searches-link" class="nav__link--stacked">
+                    <li class="nav__link--stacked-top">My Top 10</li>
+                    <li class="nav__link--stacked-bottom">Searches</li>
+                  </div>
+                </ul>
+                <button class="nav__button">Contact</button>
+              </div>
             </div>
           </div>
         </div>
@@ -51,12 +51,12 @@
         </div>
       </div>
       <header class="header__container">
-        <div class="skeleton skeleton-header-top"></div>
-        <div class="skeleton skeleton-header-middle"></div>
-        <div class="skeleton skeleton-header-bottom"></div>
-      </header>
-      <header>
-        <div class="header__container">
+        <div id="header-skeleton"></div>
+          <div class="skeleton skeleton-header-top"></div>
+          <div class="skeleton skeleton-header-middle"></div>
+          <div class="skeleton skeleton-header-bottom"></div>
+        </div>
+        <div id="header-real" class="hidden"></div>
           <div class="row header__row">
             <h3 class="header__title">
               Get Details About Your Favorite Movies, Shows, even Video Games!
@@ -93,7 +93,7 @@
                 <option value="year:asc">Year (Ascending)</option>
                 <option value="year:desc">Year (Descending)</option>
               </select>
-            </div>  
+            </div>
           </div>
         </div>
       </header>
