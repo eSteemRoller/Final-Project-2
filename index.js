@@ -6,6 +6,9 @@
 // Year: "2006"
 // imdbID: "tt0383216"
 
+
+let navAndHeaderLoaded = false;
+
 let unfilteredSearch = [];
 
 // Keep track of the most recent unfiltered search results
@@ -14,8 +17,29 @@ let lastUnfilteredSearchResults = [];
 let currentQuery = "";
 
 
+function fadeOutAndReplaceSkeletons(skeletonElementById, showElementById) {
+  const tempElement = document.getElementById(skeletonElementById);
+  const permElement = document.getElementById(showElementById);
+
+  if (!tempElement) return;
+
+  tempElement.classList.add("fade-out");
+  setTimeout(() => {
+    tempElement.style.display = "none"; // fully remove from flow
+    permElement.classList.remove("hidden");
+  }, 1500); // match CSS transition duration
+}
+
+if (!navAndHeaderLoaded) {
+  fadeOutAndReplaceSkeletons("nav-skeleton", "nav-perm");
+  fadeOutAndReplaceSkeletons("header-skeleton", "header-perm");
+  fadeOutAndReplaceSkeletons("searchResults-skeleton", "searchResults-perm");
+  navAndHeaderLoaded = true;
+}
+
+
 let debounceTimeout;
-function debounce(func, delay = 500) {
+function debounce(func, delay = 1500) {
   clearTimeout(debounceTimeout);
   debounceTimeout = setTimeout(func, delay);
 }
@@ -26,17 +50,10 @@ function onSearchChange(event) {
 }
 
 
-// function showSpinner() {
-//   document.getElementById("loading-spinner").classList.remove("hidden");
-// }
-
-// function hideSpinner() {
-//   document.getElementById("loading-spinner").classList.add("hidden");
-// }
 
 
 // Capture the default results container state once, at load time
-const defaultResultsHTML = document.getElementById("results-container").innerHTML;
+const defaultSearchResultsHTML = document.getElementById("results-container").innerHTML;
 
 
 
@@ -47,6 +64,7 @@ async function dbSearch(query) {
   if (!query || query.trim().length === 0) {
       // Reset "results-container" to original state
       const resultsContainer = document.getElementById("results-container");
+      resultsContainer.innerHTML = defaultSearchResultsHTML;
       // And, disable the filter menu
       document.getElementById("result-filter").disabled = true;
       return;
@@ -56,7 +74,7 @@ async function dbSearch(query) {
   const resultsContainer = document.getElementById("results-container");
   resultsContainer.innerHTML = `
     ${Array(6).fill().map(() => `
-      <div class="dbSearchResult__container">
+      <div class="dbSearchResult__container skeleton-card">
         <div class="skeleton skeleton-poster"></div>
         <div class="skeleton skeleton-title"></div>
         <div class="skeleton skeleton-plot"></div>
@@ -65,18 +83,27 @@ async function dbSearch(query) {
   `;
   }
 
-  showSearchSkeletons(); 
+  showSearchSkeletons();
+
+  function replaceSkeletonsWithResults(searchResultsHTML) {
+  const resultsContainer = document.getElementById("results-container");
+  // fade skeletons
+  document.querySelectorAll(".skeleton").forEach(skeletonElement => skeletonElement.classList.add("fade-out"));
+  setTimeout(() => {
+    resultsContainer.innerHTML = searchResultsHTML;
+  }, 1500); // match fade duration
+}
 
   try {
     const dbResponse = await fetch(
       `https://www.omdbapi.com/?s=${encodeURIComponent(query)}&apikey=aac2feb4`
     );
   
-    const data = await dbResponse;
+    const data = await dbResponse.json();
 
     const resultsContainer = document.getElementById("results-container");
 
-    if (data.dbResponse === "True") {
+    if (data.Response === "True") {
       recordSearch(query);
       const basicResults = data.Search.slice(0, 10);
       const detailedResults = await Promise.all(
@@ -104,9 +131,7 @@ async function dbSearch(query) {
     } 
   } catch (error) {
     console.error("Error fetching data:", error);
-  } // finally {
-  //   hideSpinner();
-  // }
+  } 
 }
 
 function onFilterChange(event) {
@@ -167,7 +192,7 @@ function applyFilters(results) {
     // Restore last unfiltered results
     resultsContainer.innerHTML = lastUnfilteredSearchResults
       .slice(0, 6)
-      .map((movie) => resultsHTML(movie))
+      .map((movie) => searchResultsHTML(movie))
       .join("");
 
     // Fade-out message after 3 seconds
@@ -182,7 +207,7 @@ function applyFilters(results) {
   } else {
     resultsContainer.innerHTML = filtered
       .slice(0, 6)
-      .map((movie) => resultsHTML(movie))
+      .map((movie) => searchResultsHTML(movie))
       .join("");
   }
 }
@@ -204,7 +229,7 @@ function filterByKeywords(results, keyword) {
 }
 
 
-function resultsHTML(movie) {
+function searchResultsHTML(movie) {
   return `
     <div class="dbSearchResult__container">
       <img src="${
@@ -227,18 +252,18 @@ function recordSearch(query) {
   if (!query) return;
 
   // Get existing search counts or start fresh
-  let searches = JSON.parse(localStorage.getItem("searchCounts")) || {};
+  let top10searches = JSON.parse(localStorage.getItem("searchCounts")) || {};
 
   // Increment count for this query
-  searches[query] = (searches[query] || 0) + 1;
+  top10searches[query] = (top10searches[query] || 0) + 1;
 
   // Save back to localStorage
-  localStorage.setItem("searchCounts", JSON.stringify(searches));
+  localStorage.setItem("searchCounts", JSON.stringify(top10searches));
 }
 
 function getTop10Searches(limit = 10) {
-  let searches = JSON.parse(localStorage.getItem("searchCounts")) || {};
-  return Object.entries(searches)
+  let top10searches = JSON.parse(localStorage.getItem("searchCounts")) || {};
+  return Object.entries(top10searches)
     .sort((a, b) => b[1] - a[1]) // sort by count desc
     .slice(0, limit);
 }
@@ -248,19 +273,19 @@ let showingTop10Searches = false; // track toggle state
 
 function showLastSearchResults() { 
   showingTop10Searches = false; // update state
-  console.log("showLastResults() called. Setting showingTop10Searches = false");
+  console.log("showLastSearchResults() called. Setting showingTop10Searches = false");
 
-  const top10container = document.getElementById("top10searches__container");
+  const top10SearchesContainer = document.getElementById("top10searches-container");
 
   if (lastUnfilteredSearchResults.length === 0) { 
     showingTop10Searches = false; // update state
-    top10container.innerHTML = "<p>No previous search results to show.</p>";
+    top10SearchesContainer.innerHTML = "<p>No previous search results to show.</p>";
     return;
   }
 
-  top10container.innerHTML = lastUnfilteredSearchResults
+  top10SearchesContainer.innerHTML = lastUnfilteredSearchResults
     .slice(0, 6)
-    .map((movie) => resultsHTML(movie))
+    .map((movie) => searchResultsHTML(movie))
     .join("");
 }
 
@@ -285,7 +310,7 @@ function hideTop10Searches() {
 }
 
 // Hook up listeners
-document.getElementById("top10searches-link").addEventListener("click", (e) => {
+document.getElementById("top10searches-links").addEventListener("click", (e) => {
   e.preventDefault();
   showTop10SearchesDialog();
 });

@@ -14,94 +14,98 @@
     <section id="mmf-landing">
       <nav>
         <div class="nav__container">
-          <div class="nav__row skeleton-nav">
+          <div id="nav-skeleton" class="skeleton-nav">
             <div class="skeleton skeleton-logo"></div>
             <div class="skeleton skeleton-title"></div>
             <div class="skeleton skeleton-menu"></div>
           </div>
-          <div id="nav-real" class="nav__row hidden"></div>
+          <div id="nav-perm" class="nav__row hidden">
             <img src="./assets/marquee-1546213_1920-modified1a_87a55e24.png" alt="" class="nav__bkgd--img">
-            <div class="nav__row">
-              <div class="nav__figure">
-                <img src="./assets/MMF-logo.png" alt="" class="mmf-logo">
-              </div>
-              <div class="nav__title">
-                <h1 class="nav__title--text">Tonight Only!</h1>
-                <h3 class="nav__sub-title--text">(or every time you visit this page)</h3>
-              </div>
-              <div class="nav__menu">
-                <ul class="nav__links">
+            <div class="nav__figure">
+              <img src="./assets/MMF-logo.png" alt="" class="mmf-logo">
+            </div>
+            <div class="nav__title">
+              <h1 class="nav__title--text">Tonight Only!</h1>
+              <h3 class="nav__sub-title--text">(or every time you visit this page)</h3>
+            </div>
+            <div class="nav__menu">
+              <ul class="nav__links">
+                <a href="/">
                   <li class="nav__link">Home</li>
-                  <div id="top10searches-link" class="nav__link--stacked">
-                    <li class="nav__link--stacked-top">My Top 10</li>
-                    <li class="nav__link--stacked-bottom">Searches</li>
-                  </div>
-                </ul>
-                <button class="nav__button">Contact</button>
-              </div>
+                </a>
+                <div id="top10searches-links" class="top10searches__links--stacked">
+                  <li class="top10searches__link--stacked-top">My Top 10</li>
+                  <li class="top10searches__link--stacked-bottom">Searches</li>
+                </div>
+              </ul>
+              <button class="nav__button">Contact</button>
             </div>
           </div>
         </div>
       </nav>
       <div id="top10searches-dialog" class="top10searches-dialog hidden">
-        <div class="top10searches-dialog__content">
-          <h3 class="mb-16">My Top 10 Searches:</h3>
-          <ol id="top10searches-list" class="mb-16"></ol>
-          <button id="close-top10searches" class="close-btn">Close</button>
+        <div id="top10searches-container">
+          <div class="top10searches-dialog__content">
+            <h3 class="mb-16">My Top 10 Searches:</h3>
+            <ol id="top10searches-list" class="mb-16"></ol>
+            <button id="close-top10searches" class="close-btn">Close</button>
+          </div>
         </div>
       </div>
       <header class="header__container">
-        <div id="header-skeleton"></div>
+        <div id="header-skeleton" class="skeleton-header">
           <div class="skeleton skeleton-header-top"></div>
           <div class="skeleton skeleton-header-middle"></div>
           <div class="skeleton skeleton-header-bottom"></div>
         </div>
-        <div id="header-real" class="hidden"></div>
-          <div class="row header__row">
-            <h3 class="header__title">
-              Get Details About Your Favorite Movies, Shows, even Video Games!
-            </h3>
-            <input type="search" class="search-bar" oninput="onSearchChange(event)" placeholder="Search for movies, shows, video games...">
-            <div class="filter__container">
-              <select class="filter-menu-box" id="result-filter" onchange="onFilterChange(event)">
-                <option value="">--- Filter By ---</option>
-                <option value="genre:Action">Genre: Action</option>
-                <option value="genre:Adventure">Genre: Adventure</option>
-                <option value="genre:Animation">Genre: Animation</option>
-                <option value="genre:Biography">Genre: Biography</option>
-                <option value="genre:Comedy">Genre: Comedy</option>
-                <option value="genre:Crime">Genre: Crime</option>
-                <option value="genre:Documentary">Genre: Documentary</option>
-                <option value="genre:Drama">Genre: Drama</option>
-                <option value="genre:Family">Genre: Family</option>
-                <option value="genre:Fantasy">Genre: Fantasy</option>
-                <option value="genre:Game-Show">Genre: Game-Show</option>
-                <option value="genre:History">Genre: History</option>
-                <option value="genre:Horror">Genre: Horror</option>
-                <option value="genre:Music">Genre: Music</option>
-                <option value="genre:Musical">Genre: Musical</option>
-                <option value="genre:Mystery">Genre: Mystery</option>
-                <option value="genre:Reality-TV">Genre: Reality-TV</option>
-                <option value="genre:Romance">Genre: Romance</option>
-                <option value="genre:Sci-Fi">Genre: Sci-Fi</option>
-                <option value="genre:Short">Genre: Short</option>
-                <option value="genre:Sport">Genre: Sport</option>
-                <option value="genre:Thriller">Genre: Thriller</option>
-                <option value="genre:War">Genre: War</option>
-                <option value="title:asc">Title (A–Z)</option>
-                <option value="title:desc">Title (Z–A)</option>
-                <option value="year:asc">Year (Ascending)</option>
-                <option value="year:desc">Year (Descending)</option>
-              </select>
-            </div>
+        <div id="header-perm" class="header__row hidden">
+          <h3 class="header__title">
+            Get Details About Your Favorite Movies, Shows, even Video Games!
+          </h3>
+          <input type="search" class="search-bar" oninput="onSearchChange(event)" placeholder="Search for movies, shows, video games...">
+          <div class="filter__container">
+            <select class="filter-menu-box" id="result-filter" onchange="onFilterChange(event)">
+              <option value="">--- Filter By ---</option>
+              <option value="genre:Action">Genre: Action</option>
+              <option value="genre:Adventure">Genre: Adventure</option>
+              <option value="genre:Animation">Genre: Animation</option>
+              <option value="genre:Biography">Genre: Biography</option>
+              <option value="genre:Comedy">Genre: Comedy</option>
+              <option value="genre:Crime">Genre: Crime</option>
+              <option value="genre:Documentary">Genre: Documentary</option>
+              <option value="genre:Drama">Genre: Drama</option>
+              <option value="genre:Family">Genre: Family</option>
+              <option value="genre:Fantasy">Genre: Fantasy</option>
+              <option value="genre:Game-Show">Genre: Game-Show</option>
+              <option value="genre:History">Genre: History</option>
+              <option value="genre:Horror">Genre: Horror</option>
+              <option value="genre:Music">Genre: Music</option>
+              <option value="genre:Musical">Genre: Musical</option>
+              <option value="genre:Mystery">Genre: Mystery</option>
+              <option value="genre:Reality-TV">Genre: Reality-TV</option>
+              <option value="genre:Romance">Genre: Romance</option>
+              <option value="genre:Sci-Fi">Genre: Sci-Fi</option>
+              <option value="genre:Short">Genre: Short</option>
+              <option value="genre:Sport">Genre: Sport</option>
+              <option value="genre:Thriller">Genre: Thriller</option>
+              <option value="genre:War">Genre: War</option>
+              <option value="title:asc">Title (A–Z)</option>
+              <option value="title:desc">Title (Z–A)</option>
+              <option value="year:asc">Year (Ascending)</option>
+              <option value="year:desc">Year (Descending)</option>
+            </select>
           </div>
         </div>
       </header>
     </section>
       <main>
         <div class="search-results__container">
-          <div class="row">
-            <div id="filter-message" class="filter-message mb-16 hidden"></div>
+          <div id="searchResults-skeleton" class="skeleton-searchResults">
+            <div class="skeleton skeleton-searchResults-top"></div>
+            <div class="skeleton skeleton-searchResults-bottom"></div>
+          </div>
+          <div id="searchResults-perm" class="row search-results__row hidden">
+            <div id="filter-message" class="filter-message hidden"></div>
             <div id="results-container" class="results-display">
               <div class="search-results__header">
                 <h3 class="search-results__title">
@@ -111,9 +115,6 @@
             </div>
           </div>
         </div>
-        <!-- <div id="loading-spinner" class="spinner hidden">
-          <img src="./assets/vintage-movie-film-reel-spinner.png" alt="Loading..." />
-        </div> -->
       </main>
       <footer>
       </footer>
